@@ -3,6 +3,7 @@ import {Client, GatewayIntentBits, ActionRowBuilder, SelectMenuBuilder } from "d
 import { registerCommands } from "./deploy-commands.mjs";
 import { createAudioPlayer, createAudioResource, getVoiceConnection, joinVoiceChannel , AudioPlayerStatus, VoiceConnectionStatus } from '@discordjs/voice'
 import { requestVoice } from "./clovavoice.mjs";
+import { requestTranslation } from "./papago_translation.mjs";
 import { generateDependencyReport } from '@discordjs/voice';
 import { voice_list , voice_info }from "./voice_list.mjs";
 
@@ -95,9 +96,29 @@ function processMessageQueue(guild_id){
     return true;
 }
 
-function playTTS(guild_id, text){
+function playTTS(guild_id, text, do_translate = true){
+    if(text == undefined || text == "") return;
+
     let guild_data = guild_data_map[guild_id];
     if(guild_data == undefined) return;
+
+    let voice_language = guild_data['language'];
+    if(do_translate && voice_language != '한국어'){ //한국어 봇이 아니면 번역 필요
+
+        let target_language = 'en';
+        switch(voice_language){
+            case '일본어': target_language = 'ja'; break;
+            case '영어': target_language = 'en'; break;
+            case '스페인어': target_language = 'es'; break;
+        }
+        
+        requestTranslation(text, target_language, (translated_text)=>{
+            console.log("translated_text: " + translated_text);
+            playTTS(guild_id, translated_text, false);
+        });
+
+        return;
+    }
 
     let message_queue = guild_data['message_queue'];
     message_queue.push(text);
@@ -244,12 +265,23 @@ client.on('messageCreate', (message) =>{
     try{
         let content = message.content;
         let guild_id = message.channel.guild.id;
+        let guild_data = guild_data_map[guild_id];
     
         if(content.startsWith("'")){
             let voice_connection = getVoiceConnection(guild_id);
             
-            if(voice_connection != undefined){            
-                playTTS(guild_id , content.substring(1));
+            if(voice_connection != undefined){         
+
+                let text = "";
+                let do_translate = true;
+                if(content.startsWith("''")) { //원문 그대로 읽기
+                    do_translate = false;
+                    text = content.substring(2);
+                } else {
+                    text = content.substring(1);
+                }
+                
+                playTTS(guild_id , text, do_translate);
             }
         }
     }catch(ex){
