@@ -1,6 +1,6 @@
 import fetch from 'node-fetch'
 
-export const requestVoice = (request_text, callback) => {
+export const requestVoice = (voice_type, request_text, callback) => {
     fetch('https://naveropenapi.apigw.ntruss.com/tts-premium/v1/tts',
     {
         method: "POST",
@@ -9,10 +9,10 @@ export const requestVoice = (request_text, callback) => {
             'X-NCP-APIGW-API-KEY': process.env.CLOVA_SECRET,
         },
         body: new URLSearchParams({   
-            speaker: process.env.VOICE_TYPE, 
+            speaker: voice_type, 
             volume: '0', 
             speed: '0', 
-            pitch: '1', 
+            pitch: '0', 
             text: request_text, 
             format: 'mp3' 
         }),

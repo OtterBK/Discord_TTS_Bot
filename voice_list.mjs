@@ -1,4 +1,4 @@
-const voice_list = [
+export const voice_list = [
     { value: 'nara', name: '아라 한국어, 여성' },
     { value: 'nara_call', name: '아라(상담원) 한국어, 여성' },
     { value: 'nminyoung', name: '민영 한국어, 여성' },
@@ -81,4 +81,117 @@ const voice_list = [
     { value: 'nwoosik', name: '우식 한국어, 남성' },
 ];
 
-export default voice_list;
+export const voice_info = {
+    "한국어": {
+        "여성 1/2": {
+            "아라": "nara",
+            "아라(상담원)": "nara_call",
+            "민영": "nminyoung",
+            "예진": "nyejin",
+            "지윤": "njiyun",
+            "수진": "nsujin",
+            "고은": "ngoeun",
+            "은영": "neunyoung",
+            "선경": "nsunkyung",
+            "유진": "nyujin",
+            "아라(화남)": "dara_ang",
+            "선희": "nsunhee",
+            "민서": "nminseo",
+            "지원": "njiwon",
+            "보라": "nbora",
+            "혜리": "nes_c_hyeri",
+            "소현": "nes_c_sohyun",
+            "미경": "nes_c_mikyung",
+            "기서": "ntiffany",
+            "늘봄": "napple",
+            "드림": "njangji",
+            "봄달": "noyj",
+            "은서": "neunseo",
+            "희라": "nheera",
+            "영미": "nyoungmi"
+        },
+        "여성 2/2": {
+            "나래": "nnarae",
+            "예지": "nyeji",
+            "유나": "nyuna",
+            "경리": "nkyunglee",
+            "민정": "nminjeong",
+            "이현": "nihyun"
+        },
+        "남성": {
+            "민상": "nminsang",
+            "신우": "nsinu",
+            "진호": "njinho",
+            "지훈": "njihun",
+            "주안": "njooahn",
+            "성훈": "nseonghoon",
+            "지환": "njihwan",
+            "시윤": "nsiyoon",
+            "태진": "ntaejin",
+            "영일": "nyoungil",
+            "승표": "nseungpyo",
+            "원탁": "nwontak",
+            "종현": "njonghyun",
+            "준영": "njoonyoung",
+            "재욱": "njaewook",
+            "기효": "nes_c_kihyo",
+            "래원": "nraewon",
+            "규원": "nkyuwon",
+            "기태": "nkitae",
+            "은우": "neunwoo",
+            "경태": "nkyungtae",
+            "우식": "nwoosik"
+        },
+        "여자아이": {
+            "다인": "ndain",
+            "가람": "ngaram"
+        },
+        "남자아이": {
+            "하준": "nhajun"
+        }
+        },
+        "일본어": {
+        "여성": {
+            "토모코": "ntomoko",
+            "나오미": "nnaomi",
+            "나오미(기쁨)": "dnaomi_joyful",
+            "나오미(뉴스)": "dnaomi_formal",
+            "리코": "driko",
+            "에리코": "deriko",
+            "사유리": "nsayuri",
+            "미오": "dmio"
+        },
+        "남성": {
+            "신지": "shinji",
+            "하지메": "dhajime",
+            "다이키": "ddaiki",
+            "아유무": "dayumu"
+        }
+        },
+        "영어": {
+        "여성": {
+            "클라라": "clara",
+            "안나": "danna",
+            "조이": "djoey"
+        },
+        "남성": {
+            "매트": "matt"
+        }
+        },
+        "중국어": {
+        "여성": {
+            
+        },
+        "남성": {
+            
+        }
+        },
+        "스페인어": {
+        "여성": {
+            
+        },
+        "남성": {
+            
+        }
+        }
+  };
