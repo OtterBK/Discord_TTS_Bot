@@ -1,13 +1,15 @@
 import dotenv from 'dotenv'
+dotenv.config({path: '.env'});
+
 import {Client, GatewayIntentBits, ActionRowBuilder, SelectMenuBuilder } from "discord.js";
 import { registerCommands } from "./deploy-commands.mjs";
 import { createAudioPlayer, createAudioResource, getVoiceConnection, joinVoiceChannel , AudioPlayerStatus, VoiceConnectionStatus } from '@discordjs/voice'
 import { requestVoice } from "./clovavoice.mjs";
 import { requestTranslation } from "./papago_translation.mjs";
 import { generateDependencyReport } from '@discordjs/voice';
-import { voice_list , voice_info }from "./voice_list.mjs";
+import { voice_list , voice_info } from "./voice_list.mjs";
+import { requestOpenAIAnswer } from "./openai.mjs";
 
-dotenv.config({path: '.env'});
 
 var guild_data_map = {};
 const client = new Client({ 
@@ -283,6 +285,31 @@ client.on('messageCreate', (message) =>{
                 
                 playTTS(guild_id , text, do_translate);
             }
+            return;
+        }
+
+        if(content.startsWith("^")) { //OPEN AI 질문
+
+            if(content.startsWith("^#"))
+            {
+                const question = content.substring(2);
+                requestTranslation(question, 'en', (question_en)=>{
+                    requestOpenAIAnswer(question_en, (answer) => {
+                        requestTranslation(answer, 'ko', (answer_kor) => { //한글로 번역해서 출력
+                            playTTS(guild_id , answer_kor, false);
+                            message.channel.send(`${answer_kor}\n(${answer.trim()})`);
+                        }, 'en');
+                    }); //영문으로 질문
+                });
+            }
+            else
+            {
+                const question = content.substring(1);
+                requestOpenAIAnswer(question, (answer) => {
+                    playTTS(guild_id , answer, false);
+                    message.channel.send(`${answer}`);
+                }); //원문으로 질문
+            }
         }
     }catch(ex){
         console.log(ex);
@@ -294,3 +321,8 @@ client.on('messageCreate', (message) =>{
 client.login(process.env.DISCORD_BOT_TOKEN).then(function () {
     console.log("LOGIN SUCCESS.");
 });
+
+//전역 에러 처리
+process.on('uncaughtException', (err) => {
+    console.error(err);
+  });
